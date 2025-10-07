@@ -3,10 +3,20 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Código da Ilha – Edição Free Fire
-// Nível: Mestre
-// Este programa simula o gerenciamento avançado de uma mochila com componentes coletados durante a fuga de uma ilha.
-// Ele introduz ordenação com critérios e busca binária para otimizar a gestão dos recursos.
+#define ITENS 10
+
+typedef struct 
+{
+    char nome[30];
+    char tipo[20];
+    int quantidade;
+} Item;
+
+
+//================== INICIO PROTÓTIPO INDÍCE FUNÇÕES============================//
+
+void exibirMenu();
+void inicializarLista(Item *lista);
 
 int main() {
     // Menu principal com opções:
@@ -16,12 +26,47 @@ int main() {
     // 4. Ordenar os itens por critério (nome, tipo, prioridade)
     // 5. Realizar busca binária por nome
     // 0. Sair
+    printf("======================== SIMULAÇÃO FREE FIRE ========================\n");
+    printf("Seja bem-vindo ao jogo de simulação Free Fire. Nessa fase, encontre os\n");
+    printf("Você pode listar os itens recolhidos.\n");
+    exibirMenu();
+
+    Item novoItem;
+    inicializarLista(&novoItem);
 
     // A estrutura switch trata cada opção chamando a função correspondente.
     // A ordenação e busca binária exigem que os dados estejam bem organizados.
 
     return 0;
 }
+
+//================== INICIO FUNÇÕES ============================//
+//Exibe menu principal
+void exibirMenu(){
+    printf("1. Adicionar um Item: \n");
+    printf("2. Remover um Item: \n");
+    printf("3. Listar todos os Itens: \n");
+    printf("4. Buscar Item: \n");
+    printf("0. Sair\n");
+}
+
+//inicializa o vetor
+void inicializarLista(Item *lista){
+    lista->quantidade = 0;
+}
+
+void inserirItemLista(Item *lista, const char *nome, const char *tipo){
+    if (lista->quantidade == ITENS){
+        printf("Erro! A lista está cheia. Não é possível inserir mais itens.\n");
+        printf("Caso queira inserir um novo item, remova um existente.\n");
+        return;
+    }
+    strcpy(lista->nome[lista->quantidade], nome);
+    strcpy(lista->tipo[lista->quantidade], tipo);
+    lista->quantidade++;
+    printf("Item inserido com sucesso!");
+}
+
 
 // Struct Item:
 // Representa um componente com nome, tipo, quantidade e prioridade (1 a 5).
