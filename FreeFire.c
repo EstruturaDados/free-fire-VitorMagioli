@@ -76,7 +76,7 @@ int main() {
 
         case 2:{
             char apagar [30];
-            printf("\nQual item você deseja remover? ", apagar);
+            printf("\nQual item você deseja remover? ");
             fgets(apagar, sizeof(apagar), stdin);
             apagar[strcspn(apagar, "\n")] ='\0';
             removerItensLista(&novoItem, apagar);
@@ -160,8 +160,8 @@ void removerItensLista(listaItens *lista, const char *nome){
 
     for(int i = pos; i < lista->quantidade -1; i++){
         lista->itens[i] = lista->itens [i+1];
-        lista->quantidade--;
     }
+    lista->quantidade--;
     printf("\nItem %s removido com sucesso!\n", nome);
 }
 
@@ -172,7 +172,7 @@ void listarItens(const listaItens *lista){
     }
     printf("Itens guardados: [ ");
     for(int i = 0; i < lista->quantidade; i++){
-        printf("%s", lista->itens[i]);
+        printf("Nome: %s\nTipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
     }
     printf("]\n");
 }
