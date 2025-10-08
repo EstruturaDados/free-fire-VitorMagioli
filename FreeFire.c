@@ -65,12 +65,10 @@ int main() {
             printf("\nTipo do item recolhido: ");
             fgets(tipoItem, sizeof(tipoItem), stdin);
             tipoItem[strcspn(tipoItem, "\n")] ='\0';
-
+            printf("========================\n\n");
             inserirItemLista(&novoItem, nomeItem, tipoItem);
-            
+            printf("\nPressione [ENTER] para continuar...");
             getchar();
-            printf("Pressione [ENTER] para continuar...\n");
-            limparbufferentrada();
             break;
         }
 
@@ -80,19 +78,15 @@ int main() {
             fgets(apagar, sizeof(apagar), stdin);
             apagar[strcspn(apagar, "\n")] ='\0';
             removerItensLista(&novoItem, apagar);
-
+            printf("\nPressione [ENTER] para continuar...");
             getchar();
-            printf("Pressione [ENTER] para continuar...\n");
-            limparbufferentrada();
             break;
         }
 
         case 3: {
             listarItens(&novoItem);
-
+            printf("Pressione [ENTER] para continuar...");
             getchar();
-            printf("Pressione [ENTER] para continuar...\n");
-            limparbufferentrada();
             break;
         }
 
@@ -118,10 +112,10 @@ int main() {
 //================== INICIO FUNÇÕES ============================//
 //Exibe menu principal
 void exibirMenu(){
-    printf("1. Adicionar um Item: \n");
-    printf("2. Remover um Item: \n");
-    printf("3. Listar todos os Itens: \n");
-    printf("4. Buscar Item: \n");
+    printf("1. Adicionar um Item \n");
+    printf("2. Remover um Item \n");
+    printf("3. Listar todos os Itens \n");
+    printf("4. Buscar Item \n");
     printf("0. Sair\n");
 }
 
@@ -134,13 +128,14 @@ void inicializarLista(listaItens *lista){
 void inserirItemLista(listaItens *lista, const char *nome, const char *tipo){
     if (lista->quantidade == ITENS){
         printf("Erro! A lista está cheia. Não é possível inserir mais itens.\n");
-        printf("Caso queira inserir um novo item, remova um existente.\n");
+        printf("Caso queira inserir um novo item, remova um existente.\n\n");
         return;
     }
     strcpy(lista->itens[lista->quantidade].nome, nome);
     strcpy(lista->itens[lista->quantidade].tipo, tipo);
     lista->quantidade++;
-    printf("\nItem inserido com sucesso!\n");
+    printf("\nItem inserido com sucesso!\n\n");
+    printf("========================\n\n");
 }
 
 void removerItensLista(listaItens *lista, const char *nome){
@@ -162,19 +157,22 @@ void removerItensLista(listaItens *lista, const char *nome){
         lista->itens[i] = lista->itens [i+1];
     }
     lista->quantidade--;
-    printf("\nItem %s removido com sucesso!\n", nome);
+    printf("\nItem %s removido com sucesso!\n\n", nome);
+    printf("========================\n\n");
 }
 
 void listarItens(const listaItens *lista){
     if(lista->quantidade == 0){
         printf("Não há itens na lista! Por favor, cadastre os itens.\n");
+        printf("========================\n\n");
         return;
     }
-    printf("Itens guardados: [ ");
+    printf("========================\n\n");
+    printf("Itens guardados: \n");
     for(int i = 0; i < lista->quantidade; i++){
-        printf("Nome: %s\nTipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
+        printf("Nome: %s | Tipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
     }
-    printf("]\n");
+    printf("========================\n\n");
 }
 
 void limparbufferentrada(){
