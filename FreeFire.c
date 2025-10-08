@@ -1,22 +1,31 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define ITENS 10
 
+//Estrutura para cada item inserido
 typedef struct 
 {
     char nome[30];
     char tipo[20];
-    int quantidade;
 } Item;
+
+typedef struct
+{
+    Item itens[ITENS];
+    int quantidade;
+}listaItens;
 
 
 //================== INICIO PROTÓTIPO INDÍCE FUNÇÕES============================//
 
 void exibirMenu();
-void inicializarLista(Item *lista);
+void inicializarLista(listaItens *lista);
+void inserirItemLista(listaItens *lista, const char *nome, const char *tipo);
+void removerItensLista(listaItens *lista, const char *nome);
+void listarItens(const listaItens *lista);
+void limparbufferentrada();
 
 int main() {
     // Menu principal com opções:
@@ -27,12 +36,78 @@ int main() {
     // 5. Realizar busca binária por nome
     // 0. Sair
     printf("======================== SIMULAÇÃO FREE FIRE ========================\n");
-    printf("Seja bem-vindo ao jogo de simulação Free Fire. Nessa fase, encontre os\n");
+    printf("Seja bem-vindo ao jogo de simulação Free Fire. Nessa fase, adicione os itens recolhidos\n");
     printf("Você pode listar os itens recolhidos.\n");
-    exibirMenu();
 
-    Item novoItem;
+    listaItens novoItem;
     inicializarLista(&novoItem);
+
+    int opcao = -1;
+
+    do
+    {
+        exibirMenu();
+        printf("\nO que você deseja fazer? ");
+        scanf("%d", &opcao);
+        limparbufferentrada();
+
+        switch (opcao)
+        {
+        case 1: {
+            //-----------INSERINDO ITENS NA LISTA//-----------
+            char nomeItem[30];
+            char tipoItem[20];
+
+            printf("\nNome do item recolhido: ");
+            fgets(nomeItem, sizeof(nomeItem), stdin);
+            nomeItem[strcspn(nomeItem, "\n")] = '\0';
+
+            printf("\nTipo do item recolhido: ");
+            fgets(tipoItem, sizeof(tipoItem), stdin);
+            tipoItem[strcspn(tipoItem, "\n")] ='\0';
+
+            inserirItemLista(&novoItem, nomeItem, tipoItem);
+            
+            getchar();
+            printf("Pressione [ENTER] para continuar...\n");
+            limparbufferentrada();
+            break;
+        }
+
+        case 2:{
+            char apagar [30];
+            printf("\nQual item você deseja remover? ", apagar);
+            fgets(apagar, sizeof(apagar), stdin);
+            apagar[strcspn(apagar, "\n")] ='\0';
+            removerItensLista(&novoItem, apagar);
+
+            getchar();
+            printf("Pressione [ENTER] para continuar...\n");
+            limparbufferentrada();
+            break;
+        }
+
+        case 3: {
+            listarItens(&novoItem);
+
+            getchar();
+            printf("Pressione [ENTER] para continuar...\n");
+            limparbufferentrada();
+            break;
+        }
+
+        case 0:
+            printf("Saindo do jogo...\n");
+            break;
+
+        default:
+            printf("[ERRO] Opção inválida!\n");
+            break;
+        }
+
+    } while (opcao != 0);
+
+    
 
     // A estrutura switch trata cada opção chamando a função correspondente.
     // A ordenação e busca binária exigem que os dados estejam bem organizados.
@@ -51,22 +126,62 @@ void exibirMenu(){
 }
 
 //inicializa o vetor
-void inicializarLista(Item *lista){
+void inicializarLista(listaItens *lista){
     lista->quantidade = 0;
 }
 
-void inserirItemLista(Item *lista, const char *nome, const char *tipo){
+//insere itens no array estático
+void inserirItemLista(listaItens *lista, const char *nome, const char *tipo){
     if (lista->quantidade == ITENS){
         printf("Erro! A lista está cheia. Não é possível inserir mais itens.\n");
         printf("Caso queira inserir um novo item, remova um existente.\n");
         return;
     }
-    strcpy(lista->nome[lista->quantidade], nome);
-    strcpy(lista->tipo[lista->quantidade], tipo);
+    strcpy(lista->itens[lista->quantidade].nome, nome);
+    strcpy(lista->itens[lista->quantidade].tipo, tipo);
     lista->quantidade++;
-    printf("Item inserido com sucesso!");
+    printf("\nItem inserido com sucesso!\n");
 }
 
+void removerItensLista(listaItens *lista, const char *nome){
+    int pos = -1;
+
+    for(int i = 0; i < lista->quantidade; i++){
+        if(strcmp(lista->itens[i].nome, nome) == 0){
+            pos = i;
+            break;
+        }
+    }
+
+    if (pos == -1){
+        printf("\n[ERRO] O nome digitado não foi encontrado\n");
+        return;
+    }
+
+    for(int i = pos; i < lista->quantidade -1; i++){
+        lista->itens[i] = lista->itens [i+1];
+        lista->quantidade--;
+    }
+    printf("\nItem %s removido com sucesso!\n", nome);
+}
+
+void listarItens(const listaItens *lista){
+    if(lista->quantidade == 0){
+        printf("Não há itens na lista! Por favor, cadastre os itens.\n");
+        return;
+    }
+    printf("Itens guardados: [ ");
+    for(int i = 0; i < lista->quantidade; i++){
+        printf("%s", lista->itens[i]);
+    }
+    printf("]\n");
+}
+
+void limparbufferentrada(){
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
+}
 
 // Struct Item:
 // Representa um componente com nome, tipo, quantidade e prioridade (1 a 5).
