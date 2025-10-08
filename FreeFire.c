@@ -25,6 +25,7 @@ void inicializarLista(listaItens *lista);
 void inserirItemLista(listaItens *lista, const char *nome, const char *tipo);
 void removerItensLista(listaItens *lista, const char *nome);
 void listarItens(const listaItens *lista);
+void buscarItemPorNome(const listaItens *lista, const char *nome);
 void limparbufferentrada();
 
 int main() {
@@ -85,6 +86,22 @@ int main() {
 
         case 3: {
             listarItens(&novoItem);
+            printf("Pressione [ENTER] para continuar...");
+            getchar();
+            break;
+        }
+
+        case 4: {
+            char busca[30];
+
+            printf("========================\n");
+            printf("==== BUSCA DE ITENS ====\n");
+            printf("========================\n");
+            printf("\nDigite o NOME do item: ");
+            fgets(busca, sizeof(busca), stdin);
+            busca[strcspn(busca, "\n")] = '\0';
+
+            buscarItemPorNome(&novoItem, busca);
             printf("Pressione [ENTER] para continuar...");
             getchar();
             break;
@@ -175,6 +192,22 @@ void listarItens(const listaItens *lista){
     printf("========================\n\n");
 }
 
+void buscarItemPorNome(const listaItens *lista, const char *nome){
+
+    int encontrado = 0;
+
+    for(int i = 0; i < lista->quantidade; i++){
+        if(strcmp(lista->itens[i].nome, nome) == 0){
+            printf("Item: %s | Tipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
+            encontrado = 1;
+            break;
+        }
+    }
+    if (encontrado == 0){
+        printf("O item ''%s'' não foi encontrado!", nome);
+    }
+}
+
 void limparbufferentrada(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -224,5 +257,5 @@ void limparbufferentrada(){
 
 // buscaBinariaPorNome():
 // Realiza busca binária por nome, desde que a mochila esteja ordenada por nome.
-// Se encontrar, exibe os dados do item buscado.
-// Caso contrário, informa que não encontrou o item.
+// Se encontrar, exibe os dados do  buscado.
+// Caso contrário, informa que não encoitemntrou o item.
