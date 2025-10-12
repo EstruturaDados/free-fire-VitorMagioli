@@ -4,19 +4,31 @@
 
 #define ITENS 10
 
+long int comparacoes;
+
 //Estrutura para cada item inserido
 typedef struct 
 {
     char nome[30];
     char tipo[20];
+    int quantidade;
 } Item;
 
 typedef struct
 {
     Item itens[ITENS];
-    int quantidade;
+    int total;
+    int estaOrdenado; // Flag para controlar se o vetor está ordenado para busca binária.
 }listaItens;
 
+typedef struct No
+{
+    Item dados;
+    struct No *proximo;
+}No;
+
+// A mochila com lista encadeada é representada por um ponteiro para o primeiro nó.
+typedef No* MochilaListaEncadeada;
 
 //================== INICIO PROTÓTIPO INDÍCE FUNÇÕES============================//
 
@@ -58,6 +70,7 @@ int main() {
             //-----------INSERINDO ITENS NA LISTA//-----------
             char nomeItem[30];
             char tipoItem[20];
+            int qtd;
 
             printf("\nNome do item recolhido: ");
             fgets(nomeItem, sizeof(nomeItem), stdin);
@@ -66,8 +79,13 @@ int main() {
             printf("\nTipo do item recolhido: ");
             fgets(tipoItem, sizeof(tipoItem), stdin);
             tipoItem[strcspn(tipoItem, "\n")] ='\0';
+                        
+            printf("\nQuantidade: ");
+            scanf("%d", &qtd);
+            limparbufferentrada();
             printf("========================\n\n");
-            inserirItemLista(&novoItem, nomeItem, tipoItem);
+            inserirItemLista(&novoItem, nomeItem, tipoItem, qtd);
+            
             printf("\nPressione [ENTER] para continuar...");
             getchar();
             break;
@@ -137,28 +155,41 @@ void exibirMenu(){
 }
 
 //inicializa o vetor
+/**
+ * @brief Inicializa a mochila com vetor, zerando a quantidade de itens.
+ * @param mochila Ponteiro para a MochilaVetor.
+ */
+
 void inicializarLista(listaItens *lista){
-    lista->quantidade = 0;
+    lista->total = 0;
+    lista->estaOrdenado = 0; // O vetor começa desordenado.
 }
 
 //insere itens no array estático
-void inserirItemLista(listaItens *lista, const char *nome, const char *tipo){
-    if (lista->quantidade == ITENS){
+/**
+ * @brief Insere um novo item no final do vetor.
+ * @return encerra a execução se a mochila estiver cheia.
+ */
+
+void inserirItemLista(listaItens *lista, const char *nome, const char *tipo, int quantidade){
+    if (lista->total == ITENS){
         printf("Erro! A lista está cheia. Não é possível inserir mais itens.\n");
         printf("Caso queira inserir um novo item, remova um existente.\n\n");
         return;
     }
-    strcpy(lista->itens[lista->quantidade].nome, nome);
-    strcpy(lista->itens[lista->quantidade].tipo, tipo);
-    lista->quantidade++;
-    printf("\nItem inserido com sucesso!\n\n");
+    strcpy(lista->itens[lista->total].nome, nome);
+    strcpy(lista->itens[lista->total].tipo, tipo);
+    lista->itens[lista->total].quantidade = quantidade;
+    lista->total++;
+    lista->estaOrdenado = 0; // Inserção desordena o vetor.
+    printf("\nItem %s inserido com sucesso!\n\n", lista->itens[lista->total].nome);
     printf("========================\n\n");
 }
 
 void removerItensLista(listaItens *lista, const char *nome){
     int pos = -1;
 
-    for(int i = 0; i < lista->quantidade; i++){
+    for(int i = 0; i < lista->total; i++){
         if(strcmp(lista->itens[i].nome, nome) == 0){
             pos = i;
             break;
@@ -170,23 +201,24 @@ void removerItensLista(listaItens *lista, const char *nome){
         return;
     }
 
-    for(int i = pos; i < lista->quantidade -1; i++){
+    for(int i = pos; i < lista->total -1; i++){
         lista->itens[i] = lista->itens [i+1];
     }
-    lista->quantidade--;
+    lista->total--;
+    lista->estaOrdenado = 0;
     printf("\nItem %s removido com sucesso!\n\n", nome);
     printf("========================\n\n");
 }
 
 void listarItens(const listaItens *lista){
-    if(lista->quantidade == 0){
+    if(lista->total == 0){
         printf("Não há itens na lista! Por favor, cadastre os itens.\n");
         printf("========================\n\n");
         return;
     }
     printf("========================\n\n");
     printf("Itens guardados: \n");
-    for(int i = 0; i < lista->quantidade; i++){
+    for(int i = 0; i < lista->total; i++){
         printf("Nome: %s | Tipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
     }
     printf("========================\n\n");
@@ -196,7 +228,7 @@ void buscarItemPorNome(const listaItens *lista, const char *nome){
 
     int encontrado = 0;
 
-    for(int i = 0; i < lista->quantidade; i++){
+    for(int i = 0; i < lista->total; i++){
         if(strcmp(lista->itens[i].nome, nome) == 0){
             printf("Item: %s | Tipo: %s\n", lista->itens[i].nome, lista->itens[i].tipo);
             encontrado = 1;
@@ -215,7 +247,7 @@ void limparbufferentrada(){
 }
 
 // Struct Item:
-// Representa um componente com nome, tipo, quantidade e prioridade (1 a 5).
+// Representa um componente com nome, tipo, total e prioridade (1 a 5).
 // A prioridade indica a importância do item na montagem do plano de fuga.
 
 // Enum CriterioOrdenacao:
@@ -223,7 +255,7 @@ void limparbufferentrada(){
 
 // Vetor mochila:
 // Armazena até 10 itens coletados.
-// Variáveis de controle: numItens (quantidade atual), comparacoes (análise de desempenho), ordenadaPorNome (para controle da busca binária).
+// Variáveis de controle: numItens (total atual), comparacoes (análise de desempenho), ordenadaPorNome (para controle da busca binária).
 
 // limparTela():
 // Simula a limpeza da tela imprimindo várias linhas em branco.
@@ -233,7 +265,7 @@ void limparbufferentrada(){
 
 // inserirItem():
 // Adiciona um novo componente à mochila se houver espaço.
-// Solicita nome, tipo, quantidade e prioridade.
+// Solicita nome, tipo, total e prioridade.
 // Após inserir, marca a mochila como "não ordenada por nome".
 
 // removerItem():
@@ -246,7 +278,7 @@ void limparbufferentrada(){
 // menuDeOrdenacao():
 // Permite ao jogador escolher como deseja ordenar os itens.
 // Utiliza a função insertionSort() com o critério selecionado.
-// Exibe a quantidade de comparações feitas (análise de desempenho).
+// Exibe a total de comparações feitas (análise de desempenho).
 
 // insertionSort():
 // Implementação do algoritmo de ordenação por inserção.
