@@ -34,7 +34,7 @@ typedef No* MochilaListaEncadeada;
 
 void exibirMenu();
 void inicializarLista(listaItens *lista);
-void inserirItemLista(listaItens *lista, const char *nome, const char *tipo);
+void inserirItemLista(listaItens *lista, const char *nome, const char *tipo, int quantidade);
 void removerItensLista(listaItens *lista, const char *nome);
 void listarItens(const listaItens *lista);
 void buscarItemPorNome(const listaItens *lista, const char *nome);
