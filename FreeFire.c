@@ -427,3 +427,32 @@ int buscaBinariaPorNome(const Componente torre[], int n, const char* nomeChave) 
     }
     return -1; // Não encontrado
 }
+
+// --- Função para Medição de Desempenho ---
+
+/**
+ * @brief Mede o tempo de execução de um algoritmo de ordenação e exibe as métricas.
+ * @param algoritmo Ponteiro para a função de ordenação a ser executada.
+ * @param torre O array de componentes.
+ * @param n O número de componentes.
+ */
+void medirDesempenhoOrdenacao(void (*algoritmo)(Componente[], int), Componente torre[], int n) {
+    // Zera os contadores antes de cada execução
+    comparacoes = 0;
+    trocas = 0;
+
+    clock_t start, end;
+    double cpu_time_used;
+
+    start = clock();
+    algoritmo(torre, n); // Executa o algoritmo passado como parâmetro
+    end = clock();
+
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    printf("\n--- Análise de Desempenho ---\n");
+    printf("Tempo de execução: %f segundos\n", cpu_time_used);
+    printf("Número de comparações: %lld\n", comparacoes);
+    printf("Número de trocas: %lld\n", trocas);
+    printf("-----------------------------\n");
+}
