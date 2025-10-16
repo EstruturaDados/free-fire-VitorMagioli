@@ -345,3 +345,64 @@ void adicionarComponente(Componente torre[], int *n, int *ordenadoPorNome) {
     *ordenadoPorNome = 0; // Adicionar um novo item quebra a ordenação.
     printf("\nComponente adicionado com sucesso!\n");
 }
+
+// --- Algoritmos de Ordenação ---
+
+/**
+ * @brief Ordena os componentes por NOME usando Bubble Sort.
+ */
+void bubbleSortNome(Componente torre[], int n) {
+    if (n < 2) return;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            comparacoes++;
+            if (strcmp(torre[j].nome, torre[j + 1].nome) > 0) {
+                Componente temp = torre[j];
+                torre[j] = torre[j + 1];
+                torre[j + 1] = temp;
+                trocas++;
+            }
+        }
+    }
+}
+
+/**
+ * @brief Ordena os componentes por TIPO usando Insertion Sort.
+ */
+void insertionSortTipo(Componente torre[], int n) {
+    if (n < 2) return;
+    for (int i = 1; i < n; i++) {
+        Componente chave = torre[i];
+        int j = i - 1;
+        while (j >= 0 && (comparacoes++, strcmp(torre[j].tipo, chave.tipo) > 0)) {
+            torre[j + 1] = torre[j];
+            j = j - 1;
+            trocas++;
+        }
+        torre[j + 1] = chave;
+        // Conta a troca final para colocar a chave na posição certa
+        if (j != i - 1) trocas++;
+    }
+}
+
+/**
+ * @brief Ordena os componentes por PRIORIDADE (int) usando Selection Sort.
+ */
+void selectionSortPrioridade(Componente torre[], int n) {
+    if (n < 2) return;
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            comparacoes++;
+            if (torre[j].prioridade < torre[min_idx].prioridade) {
+                min_idx = j;
+            }
+        }
+        if (min_idx != i) {
+            Componente temp = torre[min_idx];
+            torre[min_idx] = torre[i];
+            torre[i] = temp;
+            trocas++;
+        }
+    }
+}
