@@ -406,3 +406,24 @@ void selectionSortPrioridade(Componente torre[], int n) {
         }
     }
 }
+
+// --- Algoritmo de Busca ---
+
+/**
+ * @brief Busca um componente por nome usando Busca Binária.
+ * @param torre O array de componentes (DEVE ESTAR ORDENADO POR NOME).
+ * @return O índice do componente se encontrado, -1 caso contrário.
+ */
+int buscaBinariaPorNome(const Componente torre[], int n, const char* nomeChave) {
+    int inicio = 0, fim = n - 1;
+    while (inicio <= fim) {
+        comparacoes++;
+        int meio = inicio + (fim - inicio) / 2;
+        int res = strcmp(torre[meio].nome, nomeChave);
+
+        if (res == 0) return meio; // Encontrado
+        if (res < 0) inicio = meio + 1; // Busca na metade direita
+        else fim = meio - 1; // Busca na metade esquerda
+    }
+    return -1; // Não encontrado
+}
