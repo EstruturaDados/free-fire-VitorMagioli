@@ -28,31 +28,22 @@ typedef struct {
 
 //================== INICIO PROTÓTIPO INDÍCE FUNÇÕES============================//
 
-// --- Funções Auxiliares ---
-void limparbufferentrada();
+// --- Funções de Interface e Utilitários ---
+void limparBufferEntrada();
 void pausa();
+void mostrarComponentes(const Componente torre[], int n);
+void adicionarComponente(Componente torre[], int *n, int *ordenadoPorNome);
 
-// --- Funções para o VETOR ---
-// CORREÇÃO: Renomeando todas as funções do vetor para serem únicas.
-void inicializarVetor(listaItens *lista);
-void inserirItemVetor(listaItens *lista, Item novoItem);
-int removerItemVetor(listaItens *lista, const char *nome);
-void listarItensVetor(const listaItens *lista);
-int buscarSequencialVetor(const listaItens *lista, const char *nome);
-void ordenarVetor(listaItens *lista);
-int buscarBinariaVetor(const listaItens *lista, const char *nome);
+// --- Algoritmos de Ordenação ---
+void bubbleSortNome(Componente torre[], int n);
+void insertionSortTipo(Componente torre[], int n);
+void selectionSortPrioridade(Componente torre[], int n);
 
-// --- Funções para a LISTA ENCADEADA ---
-// CORREÇÃO: Adicionando protótipos para as funções da lista com nomes únicos.
-void inserirItemListaEncadeada(MochilaListaEncadeada *mochila, Item novoItem);
-int removerItemListaEncadeada(MochilaListaEncadeada *mochila, const char *nome);
-void listarItensListaEncadeada(const MochilaListaEncadeada *mochila);
-No* buscarSequencialListaEncadeada(const MochilaListaEncadeada *mochila, const char *nome);
+// --- Algoritmo de Busca ---
+int buscaBinariaPorNome(const Componente torre[], int n, const char* nomeChave);
 
-// --- Menus ---
-void menuVetor(listaItens *mochila);
-void menuLista(MochilaListaEncadeada *mochila);
-
+// --- Função para Medição de Desempenho ---
+void medirDesempenhoOrdenacao(void (*algoritmo)(Componente[], int), Componente torre[], int n);
 
 int main() {
     printf("======================== SIMULAÇÃO FREE FIRE ========================\n");
