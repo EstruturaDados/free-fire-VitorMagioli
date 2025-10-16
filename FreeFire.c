@@ -1,32 +1,30 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-#define ITENS 10
+// Define o número máximo de componentes que a torre pode ter.
+#define MAX_COMPONENTES 20
 
-long int comparacoes;
+// Variáveis globais para contar operações de desempenho.
+// Usamos long long para evitar estouro em listas maiores ou algoritmos ineficientes.
+long long int comparacoes = 0;
+long long int trocas = 0;
 
-// Estrutura para cada item inserido (Sem alterações, está perfeita)
+//======================================================================
+// ESTRUTURA DE DADOS (STRUCT)
+//======================================================================
+
+/**
+ * @brief Define a estrutura de um componente da torre.
+ * Contém nome, tipo e um nível de prioridade para a montagem.
+ */
 typedef struct {
     char nome[30];
     char tipo[20];
-    int quantidade;
-} Item;
+    int prioridade;
+} Componente;
 
-// Estrutura para a mochila com vetor (Sem alterações, está perfeita)
-typedef struct {
-    Item itens[ITENS];
-    int total;
-    int estaOrdenado;
-} listaItens;
-
-// Estrutura para o Nó da lista encadeada (Sem alterações, está perfeita)
-typedef struct No {
-    Item dados;
-    struct No *proximo;
-} No;
-
-typedef No* MochilaListaEncadeada;
 
 //================== INICIO PROTÓTIPO INDÍCE FUNÇÕES============================//
 
